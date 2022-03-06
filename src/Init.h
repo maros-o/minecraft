@@ -21,9 +21,9 @@ GLFWwindow* Initialize(unsigned int const SCREEN_WIDTH, unsigned int const SCREE
     glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
     glEnable(GL_DEPTH_TEST);
-    //glEnable(GL_CULL_FACE);
-    //glCullFace(GL_FRONT);
-    //glFrontFace(GL_CCW);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_FRONT);
+    glFrontFace(GL_CW);
 
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 

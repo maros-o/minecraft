@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+#include <cstdint>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -25,52 +26,60 @@ int main(void)
     Shader ourShader("res/Shaders/shader.vs", "res/Shaders/shader.fs");
 
     float vertices[] = {
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-         0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+            //Position          //Texture
+        //--------------------------------- front
+         0.5f,  0.5f, -0.5f,    1.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,    1.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,    0.0f, 0.0f,
 
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,    0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,    0.0f, 1.0f,
+        0.5f,  0.5f, -0.5f,     1.0f, 1.0f,
 
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        //--------------------------------- back
+        -0.5f, -0.5f,  0.5f,    0.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,    1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,    1.0f, 1.0f,
 
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,    1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,    0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,    0.0f, 0.0f,
 
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        //--------------------------------- left
+        -0.5f,  0.5f,  0.5f,    1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,    1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,    0.0f, 1.0f,
 
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-    };
+        -0.5f, -0.5f, -0.5f,    0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,    0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,    1.0f, 0.0f,
 
-    unsigned int indices[] = {
-        0, 1, 3, // first triangle
-        1, 2, 3  // second triangle
+        //--------------------------------- right
+         0.5f, -0.5f, -0.5f,    0.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,    1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,    1.0f, 0.0f,
+
+         0.5f,  0.5f,  0.5f,    1.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,    0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f,    0.0f, 1.0f,
+
+         //-------------------------------- bot
+        -0.5f, -0.5f, -0.5f,    0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,    1.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,    1.0f, 0.0f,
+
+         0.5f, -0.5f,  0.5f,    1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,    0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,    0.0f, 1.0f,
+
+        //--------------------------------- top
+         0.5f,  0.5f,  0.5f,    1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,    1.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f,    0.0f, 1.0f,
+
+        -0.5f,  0.5f, -0.5f,    0.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,    0.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,    1.0f, 0.0f,
     };
 
     unsigned int VBO, VAO;
@@ -83,6 +92,7 @@ int main(void)
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     // position attribute
+                       //id, size, type,            pos + tex size,   start offset
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
@@ -96,11 +106,11 @@ int main(void)
     glBindTexture(GL_TEXTURE_2D, texture1);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     int width, height, nrChannels;
     stbi_set_flip_vertically_on_load(true);
-    unsigned char* data = stbi_load("res/textures/dirt.jpg", &width, &height, &nrChannels, 0);
+    unsigned char* data = stbi_load("res/textures/dirt512.jpg", &width, &height, &nrChannels, 0);
     if (data) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
@@ -110,23 +120,27 @@ int main(void)
     }
     stbi_image_free(data);
 
+
+    Camera cam(window, SCREEN_WIDTH, SCREEN_HEIGHT);
+
     ourShader.use(); // don't forget to activate/use the shader before setting uniforms
     ourShader.setInt("texture1", 0);
+    ourShader.setMat4("projection", cam.GetProjectionMatrix(SCREEN_WIDTH, SCREEN_HEIGHT));
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture1);
 
-    unsigned int cubes_size = 32768;
-    unsigned int a_size = (int)std::pow(cubes_size, 1 / 3.);
-    glm::vec3 * cubePositions = new glm::vec3[cubes_size];
-    for (unsigned int x = 0; x < a_size; x++) {
-        for (unsigned int z = 0; z < a_size; z++) {
-            for (unsigned int y = 0; y < a_size; y++) {
-                cubePositions[x * a_size * a_size + z * a_size + y] = glm::vec3((float)x, (float)y, (float)z);
+    const uint16_t x_size = 16, z_size = 16, y_size = 32;
+
+    auto chunk = new bool[x_size][y_size][z_size];
+
+    for (uint16_t x = 0; x < x_size; x++) {
+        for (uint16_t y = 0; y < y_size; y++) {
+            for (uint16_t z = 0; z < z_size; z++) {
+                chunk[x][y][z] = true;
             }
         }
     }
 
-    Camera cam(window, SCREEN_WIDTH, SCREEN_HEIGHT);
     while (!glfwWindowShouldClose(window)) //game loop
     {
         cam.ProcessInput();
@@ -134,25 +148,34 @@ int main(void)
 
         // activate shader
         ourShader.use();
-        ourShader.setMat4("view", cam.GetViewMatrix());        
-        ourShader.setMat4("projection", cam.GetProjectionMatrix(SCREEN_WIDTH, SCREEN_HEIGHT));
+        ourShader.setMat4("view", cam.GetViewMatrix());
 
-        // render boxes
         glBindVertexArray(VAO);
-        for (unsigned int i = 0; i < cubes_size; i++)
-        {
-            // calculate the model matrix for each object and pass it to shader before drawing
-            glm::mat4 model = glm::mat4(1.0f);
-            model = glm::translate(model, glm::vec3(cubePositions[i].x, cubePositions[i].y, cubePositions[i].z));
-            //model = glm::rotate(model, (float)glfwGetTime() * (i+1), glm::vec3(1.0f, 0.3f, 0.5f));
-            ourShader.setMat4("model", model);
 
-            glDrawArrays(GL_TRIANGLES, 0, 6); //forward
-            glDrawArrays(GL_TRIANGLES, 6, 6); //back
-            glDrawArrays(GL_TRIANGLES, 12, 6); //left
-            glDrawArrays(GL_TRIANGLES, 18, 6); //right
-            glDrawArrays(GL_TRIANGLES, 24, 6); //bot
-            glDrawArrays(GL_TRIANGLES, 30, 6); //top
+        for (uint16_t x = 0; x < x_size; x++) {
+            for (uint16_t y = 0; y < y_size; y++) {
+                for (uint16_t z = 0; z < z_size; z++) {
+
+                    if (chunk[x][y][z]) {
+                        glm::mat4 model = glm::mat4(1.0f);
+                        model = glm::translate(model, glm::vec3((float)x, (float)y, (float)z));
+                        ourShader.setMat4("model", model);
+                    }
+
+                    if (z == 0)
+                        glDrawArrays(GL_TRIANGLES, 0, 6); //front
+                    if (z == z_size - 1)
+                        glDrawArrays(GL_TRIANGLES, 6, 6); //back
+                    if (x == 0)
+                        glDrawArrays(GL_TRIANGLES, 12, 6); //left
+                    if (x == x_size - 1)
+                        glDrawArrays(GL_TRIANGLES, 18, 6); //right
+                    if (y == 0)
+                        glDrawArrays(GL_TRIANGLES, 24, 6); //bot
+                    if (y == y_size - 1)
+                        glDrawArrays(GL_TRIANGLES, 30, 6); //top
+                }
+            }
         }
 
         glfwSwapBuffers(window);
@@ -160,7 +183,6 @@ int main(void)
     }
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
-    delete[] cubePositions;
 
     glfwTerminate();
     return 0;

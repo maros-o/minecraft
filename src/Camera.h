@@ -5,6 +5,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <iostream>
+#include <iomanip>
 
 const float SPEED = 0.1f;
 const float SENSITIVITY = 0.1f;
@@ -15,11 +16,14 @@ const float PITCH = 0.0f;
 const float MAX_DRAW_DISTANCE = 200.0f;
 const float MIN_DRAW_DISTANCE = 0.1f;
 
+//fps
 double prevTime = 0.0;
 double currTime = 0.0;
 double timeDiff = 0.0;
 double delayer = 0.0;
 unsigned int counter = 0;
+
+unsigned int culling_cooldown = 0;
 
 class Camera
 {
@@ -38,6 +42,7 @@ public:
         m_lastY = (float)SCREEN_HEIGHT / 2;
         m_deltaTime = 0.0f;
         m_lastFrame = 0.0f;
+        m_culling = true;
 
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
@@ -68,6 +73,19 @@ public:
         if (glfwGetKey(m_window, GLFW_KEY_D) == GLFW_PRESS) m_position += glm::normalize(glm::cross(m_front, m_up)) * SPEED;
         if (glfwGetKey(m_window, GLFW_KEY_W) == GLFW_PRESS) m_position += m_front * SPEED;
         if (glfwGetKey(m_window, GLFW_KEY_S) == GLFW_PRESS) m_position -= m_front * SPEED;
+
+        if (glfwGetKey(m_window, GLFW_KEY_C) == GLFW_PRESS && culling_cooldown > 20) {
+            culling_cooldown = 0;
+            if (m_culling) {
+                glDisable(GL_CULL_FACE);
+                m_culling = false;
+            }
+            else {
+                glEnable(GL_CULL_FACE);
+                m_culling = true;
+            }
+        }
+        else culling_cooldown++;
     }
 
     void PrintFPS() {
@@ -77,9 +95,11 @@ public:
         if (timeDiff > 1.0 / 30.0) {
             if (delayer < currTime) {
                 delayer = currTime + 0.2;
-                system("CLS");
-                std::cout << int(1.0 / timeDiff * counter) << " FPS / ";
-                std::cout << timeDiff / counter * 1000 << " ms" << std::endl;
+                std::stringstream ss;
+                ss << std::fixed << int(1.0 / timeDiff * counter) << " FPS  |  " << std::setprecision(0) << timeDiff / counter * 1000 << " ms";
+                if (m_culling) ss << "  |  Face Culling: ON";
+                else ss << "  |  Face Culling: OFF";
+                glfwSetWindowTitle(m_window, ss.str().c_str());
             }
             prevTime = currTime;
             counter = 0;
@@ -137,6 +157,7 @@ private:
     float m_lastY;
     float m_deltaTime;
     float m_lastFrame;
+    bool m_culling;
     // calculates the front vector from the Camera's (updated) Euler Angles
     void updateCameraVectors()
     {
